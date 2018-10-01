@@ -37,6 +37,8 @@ public class Game {
 				farmer.resetValues();
 			}
 		}
+		player.findAnUnusedNumber();
+		player.printUnusedNumber();
 //		while(player.returnGuess() != farmer.returnSecretNumber()) {
 //			farmer.calculateResponse(player.logicGuess());
 //			this.guessNumber++;

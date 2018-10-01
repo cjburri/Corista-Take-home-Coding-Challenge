@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 public class Player implements Players {
 	
@@ -9,6 +10,7 @@ public class Player implements Players {
 	private int guess;
 	
 	int testNumber = 0;
+	int unusedNumber = -1;
 	
 	private int totalGoats = 0; //used to prematurely stop known values if necessary
 	
@@ -76,5 +78,26 @@ public class Player implements Players {
 		for(int i = 0; i < this.knownValues.length; i++) {
 			System.out.print(this.knownValues[i]);
 		}
+	}
+
+	public void findAnUnusedNumber() {
+		int count = 0;
+		for(int i = 0; i < 10; i++) {
+			if(this.unusedNumber == -1) {
+				for(int j = 0; j < this.knownValues.length; j++) {
+					if(knownValues[j] != i) {
+						count++;
+					}
+				}
+				if(count == knownValues.length) {
+					this.unusedNumber = i;
+				}
+				count = 0;
+			}
+		}
+	}
+	
+	public void printUnusedNumber() {
+		System.out.println("unused number: " + this.unusedNumber);
 	}
 }
