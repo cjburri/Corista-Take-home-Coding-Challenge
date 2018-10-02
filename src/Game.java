@@ -95,7 +95,8 @@ public class Game {
 	 public void returnString(int guessNumber, int goats, int chickens) {
 	    	System.out.print("Guess: ");
 	    	player.printGuessArray();
-	    	//System.out.print("\nAnswer: " + farmer.returnSecretNumber()); //was using this for testing purposes
+	    	System.out.print("\nAnswer: "); //was using this for testing purposes
+	    	farmer.printSecretNumberArray(); //this too
 	    	System.out.print("\nNumber of guesses: " + guessNumber + "\nGoats: " + goats + "\nChickens: " + chickens + "\n\n");
 	    }
 }

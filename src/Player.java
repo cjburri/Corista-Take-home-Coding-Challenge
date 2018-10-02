@@ -22,6 +22,7 @@ public class Player implements Players {
 	ArrayList<Integer> valuesIndexList = new ArrayList<Integer>();
 	private int valuesIndex = 0;
 	private boolean answerFound = false;
+	private int testIndex = 0;
 	
 	
 	public Player() {
@@ -130,11 +131,13 @@ public class Player implements Players {
 			}
 			if(index == guessArrayList.size()) {
 				index = 0;
-				valuesIndex++;
+				testIndex++;
+			}
+			if(testIndex == valuesIndexList.size()) {
+				testIndex = 0;
 			}
 			this.fillWithUnusedNumber();
-			this.guessArrayList.set(index, this.knownValues.get(valuesIndex));
-			
+			this.guessArrayList.set(index, this.knownValues.get(valuesIndexList.get(testIndex)));
 		}
 	}
 
@@ -148,8 +151,9 @@ public class Player implements Players {
 	}
 
 	public void setPositionOfAnswer() {
-		int finalIndex = this.guessArrayList.indexOf(this.knownValues.get(valuesIndex));
-		this.finalGuessArray.set(finalIndex, this.knownValues.get(valuesIndex));
+		int finalIndex = this.guessArrayList.indexOf(this.knownValues.get(valuesIndexList.get(testIndex)));
+		this.finalGuessArray.set(finalIndex, this.knownValues.get(valuesIndexList.get(testIndex)));
+		this.valuesIndexList.remove(testIndex);
 	}
 	
 	public void checkForCompleteAnswer() {

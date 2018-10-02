@@ -36,7 +36,6 @@ public class Farmer implements Players {
 		for(int i = 0; i < secretNumberArray.length; i++) {
 			System.out.print(secretNumberArray[i]);
 		}
-		System.out.print('\n');
 	}
 	
 	public void calculateResponse(ArrayList<Integer> guessArrayList) {
