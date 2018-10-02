@@ -1,21 +1,20 @@
 import java.util.Scanner;
 
 public class Game {
-	Player player = new Player();
-	Farmer farmer = new Farmer(player);
+	//Objects
+	Player player = new Player(); //player object
+	Farmer farmer = new Farmer(player); //player is an argument in instantiating farmer so farmer can "communicate" with the player
+	Scanner input = new Scanner(System.in); //simply to allow advancement to next turn at players leisure
 	
-	Scanner input = new Scanner(System.in);
-	
-	int guessNumber;
-	
-	boolean numberNotGuessed;
+	//fields
+	private int guessNumber;
+	private boolean numberNotGuessed;
 	
 	public Game() {
+		//allows the player and farmer to "communicate"
 		player.setFarmer(farmer);
-		
-		guessNumber = 1;
-		
-		numberNotGuessed = false;
+		guessNumber = 0;
+		numberNotGuessed = true;
 	}
     
     /* The intention of this method is to have a pass of responses between
@@ -27,21 +26,27 @@ public class Game {
 		
 		//Quick but kind of costly algorithm to acquire the number of each digit in the answer
 		for(int i = 0; i < 10; i++) {
+			//this if statement allows for the player to not "overguess" (as much as this algorithm allows)
 			if(player.returnTotalGoats() != farmer.returnSecretNumberArrayLength()) {
 				player.getKnownNumbers(i); //This will be at most 10 guesses to figure out what the digits are of the secret number
-				this.formatOutput();
 				guessNumber++;
-				farmer.resetValues();
-			}
-			else {
-				System.out.println("The player has guessed the correct sequence in " + guessNumber + " day(s)!");
+				//if by chance the secret number is something like '11111', this accounts for it
+				if(player.returnGuess() == farmer.returnSecretNumber()){
+					System.out.println("The player has guessed the correct sequence in " + guessNumber + " day(s)!");
+					i = 10;
+				}
+				else {
+					this.formatOutput();
+					farmer.resetValues();
+				}
 			}
 		}
 		
 		//This merely finds a filler number that the player will use to make calculated guesses
 		player.findAnUnusedNumber();
 		
-		while(player.returnGuess() != farmer.returnSecretNumber()) {
+		//while the player hasn't guessed the secret number, the player will continue to guess
+		while(numberNotGuessed) {
 			//the player then uses logic to find the exact position of the known numbers with the help of the farmers response
 			player.logicGuess(guessNumber);
 			farmer.calculateResponse(player.returnNumberArray());
@@ -54,26 +59,35 @@ public class Game {
 			
 			//section to format output
 			this.formatOutput();
-			
-			//setting things up for the next iteration
-			guessNumber++;
-			farmer.resetValues();
+			if(player.returnGuess() == farmer.returnSecretNumber()) {
+				this.numberNotGuessed = false;
+			}
+			else {
+				//setting things up for the next iteration
+				guessNumber++;
+				farmer.resetValues();
+			}
 		}
+		
+		//END OF GAME
 		System.out.println("you have found the farmers secret number in " + guessNumber + " days!");
 	}
 
+	/* outputs all of the data according to the prompt in an organized way
+	 */
 	private void formatOutput() {
 		this.returnString(guessNumber, farmer.returnGoats(), farmer.returnChickens());
-		System.out.println("(Press Enter To Continue)");
+		System.out.print("(Press Enter To Continue)\n");
 		@SuppressWarnings("unused")
 		String continueString = input.next();
 		
 	}
-	
+	/* Just the outputted data
+	 */
 	 public void returnString(int guessNumber, int goats, int chickens) {
 	    	System.out.print("Guess: ");
 	    	player.printGuessArray();
-	    	System.out.print("\nAnswer: " + farmer.returnSecretNumber());
+	    	//System.out.print("\nAnswer: " + farmer.returnSecretNumber()); //was using this for testing purposes
 	    	System.out.print("\nNumber of guesses: " + guessNumber + "\nGoats: " + goats + "\nChickens: " + chickens + "\n\n");
 	    }
 }
