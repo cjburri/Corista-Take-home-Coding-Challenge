@@ -18,6 +18,14 @@ public class Game {
 		numberNotGuessed = true;
 		firstLogicIteration = true;
 	}
+	public Game(int[] inputtedSecretNumber) {
+		//allows the player and farmer to "communicate"
+		player.setFarmer(farmer);
+		farmer.setSecretNumber(inputtedSecretNumber);
+		guessNumber = 0;
+		numberNotGuessed = true;
+		firstLogicIteration = true;
+	}
     
     /* The intention of this method is to have a pass of responses between
      * the farmer and the player. essentially using this class as an interface between

@@ -16,6 +16,10 @@ public class Farmer implements Players {
 		this.player = player;
 	}
 	
+	public void setSecretNumber(int[] inputtedSecretNumber) {
+		secretNumberArray = inputtedSecretNumber;
+	}
+	
 	private void setNumber() {
 		for(int i = 0; i < this.secretNumberArray.length; i++ ) {
 			this.secretNumberArray[i] = random.nextInt(10);
