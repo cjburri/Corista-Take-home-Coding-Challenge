@@ -6,7 +6,6 @@ public class Player implements Players {
 	Random random = new Random();
 	Farmer farmer;
 
-	//private int[] knownValues = {};
 	private int guess;
 	
 	int testNumber = 0;
@@ -21,6 +20,7 @@ public class Player implements Players {
 	ArrayList<Integer> guessArrayList = new ArrayList<Integer>();
 	ArrayList<Integer> knownValues = new ArrayList<Integer>();
 	private int valuesIndex = 0;
+	private boolean answerFound = false;
 	
 	
 	public Player() {
@@ -46,7 +46,12 @@ public class Player implements Players {
 
 	//all set
 	public int returnGuess() {
-		return guess;
+		this.guess = (10000 * this.guessArrayList.get(0)) 
+				  + (1000 * this.guessArrayList.get(1))
+				  + (100 * this.guessArrayList.get(2))
+				  + (10 * this.guessArrayList.get(3))
+				  + (1 * this.guessArrayList.get(4));
+		return this.guess;
 	}
 	
 	//all set
@@ -115,13 +120,18 @@ public class Player implements Players {
 	}
 
 	public void logicGuess(int guessNumber) {
-		index++;
-		if(index == guessArrayList.size()) {
-			index = 0;
-			valuesIndex++;
+		if(answerFound) {
+			this.guessArrayList = this.finalGuessArray;
 		}
-		this.fillWithUnusedNumber();
-		this.guessArrayList.set(index, this.knownValues.get(valuesIndex));
+		else {
+			index++;
+			if(index == guessArrayList.size()) {
+				index = 0;
+				valuesIndex++;
+			}
+			this.fillWithUnusedNumber();
+			this.guessArrayList.set(index, this.knownValues.get(valuesIndex));
+		}
 	}
 
 	/* Fills the entirety of the arraylist with a number that is not
@@ -137,18 +147,11 @@ public class Player implements Players {
 		int finalIndex = this.guessArrayList.indexOf(this.knownValues.get(valuesIndex));
 		this.finalGuessArray.set(finalIndex, this.knownValues.get(valuesIndex));
 	}
-
-//	public void goToNextKnownNumber() {
-//		index = 0;
-//		knownValueIndex++;
-//	}
 	
-	public void printFinalGuessArray() {
-		System.out.print("\nFinal Guess:");
-		for(int i =0; i < this.finalGuessArray.size(); i++) {
-			System.out.print(finalGuessArray.get(i));
+	public void checkForCompleteAnswer() {
+		if(!this.finalGuessArray.contains(-1)) {
+			answerFound  = true;
 		}
-		System.out.print("\n");
 	}
 	
 	//all set
