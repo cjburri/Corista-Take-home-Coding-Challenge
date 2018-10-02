@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 public class Farmer implements Players {
 	
@@ -38,24 +39,24 @@ public class Farmer implements Players {
 		System.out.print('\n');
 	}
 	
-	public void calculateResponse(int[] playersGuess) {
-		int[] noDuplicateArray = this.makeArrayNoDuplicates(playersGuess);
-		this.goats = countGoats(playersGuess);
-		this.chickens = countChickens(noDuplicateArray, playersGuess);
+	public void calculateResponse(ArrayList<Integer> guessArrayList) {
+		int[] noDuplicateArray = this.makeArrayNoDuplicates(guessArrayList);
+		this.goats = countGoats(guessArrayList);
+		this.chickens = countChickens(noDuplicateArray, guessArrayList);
 		
 		
 	}
 
-	private int[] makeArrayNoDuplicates(int[] playersGuess) {
+	private int[] makeArrayNoDuplicates(ArrayList<Integer> guessArrayList) {
 		int[] duplicates = {};
-		for(int i = 0; i < playersGuess.length; i++) {
-			for(int j = i + 1; j < playersGuess.length; j++) {
-				if(playersGuess[i] == playersGuess[j] && (numNotInDuplicates(duplicates, playersGuess[j]))) {
+		for(int i = 0; i < guessArrayList.size(); i++) {
+			for(int j = i + 1; j < guessArrayList.size(); j++) {
+				if(guessArrayList.get(i) == guessArrayList.get(j) && (numNotInDuplicates(duplicates, guessArrayList.get(j)))) {
 					int[] temp = new int[duplicates.length + 1];
 					for(int k = 0; k < duplicates.length; k++) {
 						temp[k] = duplicates[k];
 					}
-					temp[temp.length - 1] = playersGuess[j];
+					temp[temp.length - 1] = guessArrayList.get(j);
 					duplicates = temp;
 				}
 			}
@@ -73,11 +74,11 @@ public class Farmer implements Players {
 		return notInDuplicates;
 	}
 
-	private int countGoats(int[] playersGuess) {
+	private int countGoats(ArrayList<Integer> guessArrayList) {
 		int returnGoats = 0;
 		
 		for(int i = 0; i < 5; i++) {
-			if(playersGuess[i] == this.secretNumberArray[i]) {
+			if(guessArrayList.get(i) == this.secretNumberArray[i]) {
 				returnGoats++;
 			}
 		}
@@ -85,7 +86,7 @@ public class Farmer implements Players {
 		return returnGoats;
 	}
 	
-	private int countChickens(int[] nonDuplicatedGuessArray, int[] duplicatedGuessArray) {
+	private int countChickens(int[] nonDuplicatedGuessArray, ArrayList<Integer> guessArrayList) {
 		int returnChickens = 0;
 		
 		for(int i = 0; i < secretNumberArray.length; i++) {
@@ -94,7 +95,7 @@ public class Farmer implements Players {
 					returnChickens++;
 				}
 			}
-			if(duplicatedGuessArray[i] == secretNumberArray[i]) {
+			if(guessArrayList.get(i) == secretNumberArray[i]) {
 				returnChickens--;
 			}
 		}
