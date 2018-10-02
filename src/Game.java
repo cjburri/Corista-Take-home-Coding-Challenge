@@ -9,12 +9,14 @@ public class Game {
 	//fields
 	private int guessNumber;
 	private boolean numberNotGuessed;
+	private boolean firstLogicIteration; //a break case for the logical section of the code
 	
 	public Game() {
 		//allows the player and farmer to "communicate"
 		player.setFarmer(farmer);
 		guessNumber = 0;
 		numberNotGuessed = true;
+		firstLogicIteration = true;
 	}
     
     /* The intention of this method is to have a pass of responses between
@@ -48,7 +50,13 @@ public class Game {
 		//while the player hasn't guessed the secret number, the player will continue to guess
 		while(numberNotGuessed) {
 			//the player then uses logic to find the exact position of the known numbers with the help of the farmers response
-			player.logicGuess(guessNumber);
+			if(firstLogicIteration) {
+				player.logicGuess(true);
+				firstLogicIteration = false;
+			}
+			else {
+				player.logicGuess(false);
+			}
 			farmer.calculateResponse(player.returnNumberArray());
 			
 			//this sets the answer up when the player has decided it is in the right position

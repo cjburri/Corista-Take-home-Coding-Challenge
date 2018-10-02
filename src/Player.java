@@ -19,6 +19,7 @@ public class Player implements Players {
 	ArrayList<Integer> finalGuessArray = new ArrayList<Integer>();
 	ArrayList<Integer> guessArrayList = new ArrayList<Integer>();
 	ArrayList<Integer> knownValues = new ArrayList<Integer>();
+	ArrayList<Integer> valuesIndexList = new ArrayList<Integer>();
 	private int valuesIndex = 0;
 	private boolean answerFound = false;
 	
@@ -119,18 +120,21 @@ public class Player implements Players {
 		System.out.println("unused number: " + this.unusedNumber);
 	}
 
-	public void logicGuess(int guessNumber) {
+	public void logicGuess(boolean firstIteration) {
 		if(answerFound) {
 			this.guessArrayList = this.finalGuessArray;
 		}
 		else {
-			index++;
+			if(!firstIteration) {
+				index++;
+			}
 			if(index == guessArrayList.size()) {
 				index = 0;
 				valuesIndex++;
 			}
 			this.fillWithUnusedNumber();
 			this.guessArrayList.set(index, this.knownValues.get(valuesIndex));
+			
 		}
 	}
 
@@ -170,6 +174,9 @@ public class Player implements Players {
 		}
 		for(int i = 0; i < 5; i++) {
 			this.finalGuessArray.add(-1);
+		}
+		for(int i = 0; i < 5; i++) {
+			this.valuesIndexList.add(i);
 		}
 	}
 }
