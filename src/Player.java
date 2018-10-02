@@ -1,5 +1,7 @@
-import java.util.Arrays;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Player implements Players {
 	
 	Random random = new Random();
@@ -11,9 +13,18 @@ public class Player implements Players {
 	
 	int testNumber = 0;
 	int unusedNumber = -1;
+	int baseGuessNumber = -1;
+	int index = 0;
 	
 	private int totalGoats = 0; //used to prematurely stop known values if necessary
+	private int knownValueIterationCount = 0;
+	private int knownValueIteration = 0;
+	private int[] finalGuessArray = {-1,-1,-1,-1,-1};
+	private int[] possibleIndexs = {0,1,2,3,4};
+	private int knownValueIndex = 0;
+	private int index2 = 0;
 	
+	ArrayList<Integer> guessArrayList = new ArrayList<Integer>();
 	
 	
 	public Player() {
@@ -99,5 +110,104 @@ public class Player implements Players {
 	
 	public void printUnusedNumber() {
 		System.out.println("unused number: " + this.unusedNumber);
+	}
+
+	public void logicGuess(int guessNumber) {
+		
+		
+		//		if(finalGuessIsComplete()) {
+//			guessArray = finalGuessArray;
+//		}
+//		else {
+//			if(index == guessArray.length) {
+//				index = 0;
+//			}
+//			if(index2 == possibleIndexs.length - 1) {
+//				index2  = 0;
+//			}
+//			this.fillWithUnusedNumber();
+//			guessArray[index] = knownValues[possibleIndexs[index2]];
+//			index++;
+//					
+//		}
+	}
+
+	private boolean finalGuessIsComplete() {
+		boolean complete = true;
+		for(int i = 0; i < finalGuessArray.length; i++) {
+			if(finalGuessArray[i] == -1) {
+				complete = false;
+			}
+		}
+		return complete;
+	}
+
+	private void fillWithUnusedNumber() {
+		for(int i = 0; i < this.guessArray.length; i++) {
+			guessArray[i] = this.unusedNumber;
+		}
+	}
+
+	public void setPositionOfAnswer() {
+		int finalIndex = getFinalIndex();
+		this.removeFromPossibleIndexs(finalIndex);
+		finalGuessArray[finalIndex] = this.isolateNumberFromGuess();
+	}
+
+	private int isolateNumberFromGuess() {
+		int returnInt = 0;
+		for(int i = 0; i < guessArray.length; i++) {
+			if(guessArray[i] != this.unusedNumber) {
+				returnInt = guessArray[i];
+			}
+		}
+		return returnInt;
+	}
+
+	private void removeFromPossibleIndexs(int finalIndex) {
+		int[] temp = new int[possibleIndexs.length - 1];
+		int tempIndex = 0;
+		for(int i = 0; i < possibleIndexs.length - 1; i++) {
+			if(finalIndex != possibleIndexs[i]) {
+				temp[tempIndex] = possibleIndexs[i];
+				tempIndex++;
+			}
+		}
+		possibleIndexs = temp;
+		index2 = 0;
+	}
+
+	private int getFinalIndex() {
+		int finalIndex = -1;
+		for(int i = 0; i < guessArray.length; i++) {
+			if(guessArray[i] != this.unusedNumber) {
+				finalIndex = i;
+			}
+		}
+		return finalIndex;
+	}
+
+	public void goToNextKnownNumber() {
+		index = 0;
+		knownValueIndex++;
+	}
+	
+	public void printFinalGuessArray() {
+		System.out.print("\nFinal Guess:");
+		for(int i =0; i < finalGuessArray.length; i++) {
+			System.out.print(finalGuessArray[i]);
+		}
+		System.out.print("\n");
+	}
+	
+	public boolean notAlreadyAccountedFor() {
+		boolean notAlreadyAccountedFor = true;
+		if(index == 5) {
+			index = 4;
+		}
+		if(finalGuessArray[index] == guessArray[index]) {
+			notAlreadyAccountedFor = false;
+		}
+		return notAlreadyAccountedFor;
 	}
 }

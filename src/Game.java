@@ -33,16 +33,30 @@ public class Game {
 			if(player.returnTotalGoats() != farmer.returnSecretNumberArrayLength()) {
 				player.getKnownNumbers(i); //This will be at most 10 guesses to figure out what the digits are of the secret number
 				this.returnString(guessNumber, farmer.returnGoats(), farmer.returnChickens());
+				System.out.println("(Press Enter To Continue)");
+				@SuppressWarnings("unused")
+				String continueString = input.next();
 				guessNumber++;
 				farmer.resetValues();
 			}
 		}
 		player.findAnUnusedNumber();
-		player.printUnusedNumber();
-//		while(player.returnGuess() != farmer.returnSecretNumber()) {
-//			farmer.calculateResponse(player.logicGuess());
-//			this.guessNumber++;
-//		}
-		player.printKnownValues();
+		
+		while(player.returnGuess() != farmer.returnSecretNumber()) {
+			player.logicGuess(guessNumber);
+			farmer.calculateResponse(player.returnNumberArray());
+			if(farmer.returnGoats() > 0 && player.notAlreadyAccountedFor()) {
+				player.setPositionOfAnswer();
+				player.printFinalGuessArray();
+				player.goToNextKnownNumber();
+			}
+			this.returnString(guessNumber, farmer.returnGoats(), farmer.returnChickens());
+			System.out.println("(Press Enter To Continue)");
+			@SuppressWarnings("unused")
+			String continueString = input.next();
+			guessNumber++;
+			farmer.resetValues();
+		}
+		System.out.println("you have found the farmers secret number in " + guessNumber + " days!");
 	}
 }
