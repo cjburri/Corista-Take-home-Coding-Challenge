@@ -20,9 +20,11 @@ public class Player implements Players {
 	ArrayList<Integer> guessArrayList = new ArrayList<Integer>();
 	ArrayList<Integer> knownValues = new ArrayList<Integer>();
 	ArrayList<Integer> valuesIndexList = new ArrayList<Integer>();
+	ArrayList<Integer> indexList = new ArrayList<Integer>();
 	private int valuesIndex = 0;
 	private boolean answerFound = false;
 	private int testIndex = 0;
+	private boolean _switch = true;
 	
 	
 	public Player() {
@@ -126,18 +128,18 @@ public class Player implements Players {
 			this.guessArrayList = this.finalGuessArray;
 		}
 		else {
-			if(!firstIteration) {
+			if(!firstIteration && _switch) {
 				index++;
 			}
-			if(index == guessArrayList.size()) {
+			_switch = true;
+			if(index == indexList.size()) {
 				index = 0;
-				testIndex++;
 			}
 			if(testIndex == valuesIndexList.size()) {
 				testIndex = 0;
 			}
 			this.fillWithUnusedNumber();
-			this.guessArrayList.set(index, this.knownValues.get(valuesIndexList.get(testIndex)));
+			this.guessArrayList.set(indexList.get(index), this.knownValues.get(valuesIndexList.get(testIndex)));
 		}
 	}
 
@@ -154,6 +156,10 @@ public class Player implements Players {
 		int finalIndex = this.guessArrayList.indexOf(this.knownValues.get(valuesIndexList.get(testIndex)));
 		this.finalGuessArray.set(finalIndex, this.knownValues.get(valuesIndexList.get(testIndex)));
 		this.valuesIndexList.remove(testIndex);
+		this.indexList.remove(indexList.indexOf(indexList.get(index)));
+		testIndex = 0;
+		index = 0;
+		_switch = false;
 	}
 	
 	public void checkForCompleteAnswer() {
@@ -181,6 +187,7 @@ public class Player implements Players {
 		}
 		for(int i = 0; i < 5; i++) {
 			this.valuesIndexList.add(i);
+			this.indexList.add(i);
 		}
 	}
 }
