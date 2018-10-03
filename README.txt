@@ -1,4 +1,3 @@
-# Corista-Take-home-Coding-Challenge
 Name: Connor Burri
 Version: 1.0.0
 Contact Info:

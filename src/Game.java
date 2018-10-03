@@ -1,35 +1,49 @@
-import java.util.Scanner;
+/* Author: Connor Burri
+ * Date: 9/27/18
+ * Project: Corista Take Home Coding Challenge
+ */
 
 public class Game {
 	//Objects
 	Player player = new Player(); //player object
 	Farmer farmer = new Farmer(player); //player is an argument in instantiating farmer so farmer can "communicate" with the player
-	Scanner input = new Scanner(System.in); //simply to allow advancement to next turn at players leisure
 	
 	//fields
-	private int guessNumber;
-	private boolean numberNotGuessed;
+	private int guessNumber; //the number of guesses that the player has made
+	private boolean numberNotGuessed; //a logical variable to know if the number has been guessed to end the game
 	private boolean firstLogicIteration; //a break case for the logical section of the code
 	
+	//constructor for random secret number (when no .txt is passed)
 	public Game() {
 		//allows the player and farmer to "communicate"
 		player.setFarmer(farmer);
+		
+		//default values
 		guessNumber = 0;
 		numberNotGuessed = true;
 		firstLogicIteration = true;
 	}
+	
+	//constructor for when .txt file is passed
 	public Game(int[] inputtedSecretNumber) {
 		//allows the player and farmer to "communicate"
 		player.setFarmer(farmer);
+		//when a .txt file is inputted, this is where it is communicated to the farmer
 		farmer.setSecretNumber(inputtedSecretNumber);
+		
+		//default values
 		guessNumber = 0;
 		numberNotGuessed = true;
 		firstLogicIteration = true;
 	}
     
-    /* The intention of this method is to have a pass of responses between
+	/*Author: Connor Burri
+	 *Purpose: The intention of this method is to have a pass of responses between
      * the farmer and the player. essentially using this class as an interface between
-     * the two players of the game */
+     * the two players of the game
+	 *Parameters: none
+	 *Return: void
+	 */
 	public void playGame() {
 		//gives the arrays for the player to guess some non-null values
 		player.populateArrays(); 
@@ -42,8 +56,10 @@ public class Game {
 				guessNumber++;
 				//if by chance the secret number is something like '11111', this accounts for it
 				if(player.returnGuess() == farmer.returnSecretNumber()){
-					System.out.println("The player has guessed the correct sequence in " + guessNumber + " day(s)!");
+					//System.out.println("The player has guessed the correct sequence in " + guessNumber + " day(s)!");
+					guessNumber--;
 					i = 10;
+					numberNotGuessed = false;
 				}
 				else {
 					this.formatOutput();
@@ -86,25 +102,38 @@ public class Game {
 		}
 		
 		//END OF GAME
-		System.out.println("you have found the farmers secret number in " + guessNumber + " days!");
+		System.out.println("The player has gotten all 5 goats after " + guessNumber + " day(s)!");
 	}
 
-	/* outputs all of the data according to the prompt in an organized way
+	/*Author: Connor Burri
+	 *Purpose: to format the output as specified by the guidelines for cmd use
+	 *Parameters: none
+	 *Return: void
 	 */
 	private void formatOutput() {
 		this.returnString(guessNumber, farmer.returnGoats(), farmer.returnChickens());
-		System.out.print("(Press Enter To Continue)\n");
-		@SuppressWarnings("unused")
-		String continueString = input.next();
 		
 	}
-	/* Just the outputted data
+	
+	/*Author: Connor Burri
+	 *Purpose: formulates a return string for the formatOutput() method
+	 *Parameters: the number of guesses (int guessNumber), the number of goats (int goats), the number of chickens(int chickens)
+	 *Return: void
 	 */
-	 public void returnString(int guessNumber, int goats, int chickens) {
+	public void returnString(int guessNumber, int goats, int chickens) {
 	    	System.out.print("Guess: ");
 	    	player.printGuessArray();
-	    	System.out.print("\nAnswer: "); //was using this for testing purposes
-	    	farmer.printSecretNumberArray(); //this too
+	    	//System.out.print("\nAnswer: "); //was using this for testing purposes
+	    	//farmer.printSecretNumberArray(); //this too
 	    	System.out.print("\nNumber of guesses: " + guessNumber + "\nGoats: " + goats + "\nChickens: " + chickens + "\n\n");
-	    }
+	}
+
+	/*Author: Connor Burri
+	 *Purpose: used in JUnit test case to see if the logic is finding the right answer
+	 *Parameters: none
+	 *Return: true if number was falsely guessed, false otherwise
+	 */
+	public boolean returnNumberNotGuessed() {
+		return numberNotGuessed;
+	}
 }
